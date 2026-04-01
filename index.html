@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Modern Workout Tracker</title>
+    <style>
+        /* Modern Black Theme & Base Styles */
+        :root {
+            --bg-color: #0a0a0a;
+            --surface-color: #1a1a1a;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            
+            /* Color Codes */
+            --color-ready: #3b82f6;   /* Blue */
+            --color-exercise: #22c55e; /* Green */
+            --color-rest: #f97316;     /* Orange */
+            --color-done: #a855f7;     /* Purple */
+            --sidebar-width: 300px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Sidebar & Navigation */
+        .hamburger {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: rgba(0,0,0,0.5);
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .hamburger div {
+            width: 25px;
+            height: 2px;
+            background-color: var(--text-main);
+            margin: 5px 0;
+            transition: 0.3s;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: calc(-1 * var(--sidebar-width));
+            width: var(--sidebar-width);
+            height: 100%;
+            background: var(--surface-color);
+            z-index: 999;
+            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+        }
+        .sidebar.open { left: 0; }
+        
+        .sidebar-header {
+            padding: 75px 20px 20px 20px; /* Fixed hamburger overlap */
+            border-bottom: 1px solid #333;
+            display: flex;
+            gap: 10px;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            background: transparent;
+            border: 1px solid #444;
+            color: var(--text-muted);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .tab-btn.active {
+            background: var(--color-ready);
+            color: white;
+            border-color: var(--color-ready);
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        /* Settings Section */
+        .settings-panel {
+            background: #111;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #222;
+        }
+        .settings-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
+        }
+        .setting-row input[type="number"] {
+            width: 60px;
+            background: #222;
+            border: 1px solid #444;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        /* Exercise List & Form Styles */
+        .ex-item {
+            background: #222;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .ex-info { flex: 1; }
+        .ex-info div { font-size: 0.8rem; color: var(--text-muted); }
+        .ex-actions {
+            display: flex;
+            gap: 5px;
+        }
+        .ex-actions button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 5px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+        .ex-actions button:active { background: #444; }
+        .add-btn-style {
+            width: 100%;
+            padding: 12px;
+            background: #333;
+            border: 1px dashed #555;
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            background: #111;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 6px;
+            font-family: inherit;
+        }
+        .form-group textarea { resize: vertical; min-height: 100px; }
+        .form-group input[type="checkbox"] { width: auto; margin-right: 8px; vertical-align: middle; }
+
+        /* History Accordion Styles */
+        details.history-item {
+            background: #222;
+            border-left: 3px solid var(--color-done);
+            margin-bottom: 10px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        details.history-item > summary {
+            padding: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85rem;
+            list-style: none; /* Hide default marker */
+            outline: none;
+        }
+        details.history-item > summary::-webkit-details-marker { display: none; }
+        details.history-item > summary:active { background: #333; }
+        
+        .history-content {
+            padding: 0 12px 12px 12px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        .history-content pre {
+            white-space: pre-wrap;
+            font-family: inherit;
+            margin-bottom: 10px;
+        }
+        .history-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            border-top: 1px solid #333;
+            padding-top: 10px;
+        }
+        .history-actions button {
+            flex: 1;
+            background: #333;
+            color: white;
+            border: none;
+            padding: 6px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            padding: 8dvh 5vw 2dvh 5vw;
+            text-align: center;
+            font-size: 4vw;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        @media (min-width: 768px) {
+            .top-bar { font-size: 1rem; }
+        }
+
+        .top-bar #total-time {
+            color: var(--text-main);
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.5rem;
+        }
+
+        /* Center Stage - Main Button */
+        .center-stage {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2dvh 5vw;
+        }
+
+        .circle-btn {
+            width: 80vw;
+            max-width: 350px;
+            aspect-ratio: 1 / 1;
+            border-radius: 50%;
+            background-color: var(--surface-color);
+            border: 1.5vw solid var(--color-ready);
+            box-shadow: 0 0 40px rgba(59, 130, 246, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
+            color: var(--text-main);
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .circle-btn { border-width: 10px; }
+        }
+
+        .circle-btn:active { transform: scale(0.96); }
+        .circle-btn.state-exercise { border-color: var(--color-exercise); box-shadow: 0 0 50px rgba(34, 197, 94, 0.2); }
+        .circle-btn.state-rest { border-color: var(--color-rest); box-shadow: 0 0 50px rgba(249, 115, 22, 0.2); }
+        .circle-btn.state-done { border-color: var(--color-done); box-shadow: 0 0 50px rgba(168, 85, 247, 0.2); }
+
+        #item-title { font-size: 8vw; font-weight: 700; text-align: center; padding: 0 5vw; margin-bottom: 1dvh; }
+        #item-subtitle { font-size: 4vw; color: var(--text-muted); margin-bottom: 2dvh; }
+        #item-time { font-size: 16vw; font-weight: 800; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; line-height: 1; }
+
+        @media (min-width: 768px) {
+            #item-title { font-size: 2.2rem; }
+            #item-subtitle { font-size: 1rem; }
+            #item-time { font-size: 5rem; }
+        }
+
+        .bottom-bar {
+            padding: 4dvh 5vw;
+            text-align: center;
+            font-size: 4vw;
+            color: var(--text-muted);
+            background: linear-gradient(to top, #000 0%, transparent 100%);
+        }
+
+        @media (min-width: 768px) {
+            .bottom-bar { font-size: 1.1rem; }
+        }
+
+        #next-item { color: var(--text-main); font-weight: 600; display: block; margin-top: 5px; }
+
+        /* Summary Screen */
+        #summary-screen {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--bg-color);
+            display: none;
+            flex-direction: column;
+            padding: 5dvh 5vw;
+            z-index: 10;
+            overflow-y: auto;
+        }
+
+        #summary-screen h2 { text-align: center; margin: 2dvh 0; color: var(--color-done); font-size: 6vw; }
+
+        textarea {
+            flex: 1;
+            background: var(--surface-color);
+            border: 1px solid #333;
+            color: var(--text-main);
+            border-radius: 12px;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            resize: none;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            min-height: 250px;
+        }
+
+        .action-btn {
+            background-color: var(--color-ready);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .overlay {
+            position: fixed;
+            top:0; left:0; right:0; bottom:0;
+            background: rgba(0,0,0,0.8);
+            z-index: 998;
+            display: none;
+        }
+        .overlay.open { display: block; }
+
+        /* Custom Switch Styling */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #444;
+            transition: .4s;
+            border-radius: 20px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px; width: 16px;
+            left: 2px; bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--color-ready); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        /* Custom Modal */
+        .custom-modal-wrap {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .custom-modal-wrap.open { display: flex; }
+        
+        .custom-modal-content {
+            background: var(--surface-color);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+        .custom-modal-content h3 { margin-bottom: 15px; font-size: 1.2rem; }
+        .custom-modal-body { margin-bottom: 20px; font-size: 0.9rem; color: #ccc; }
+        .custom-modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+        .custom-modal-actions button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-cancel { background: #333; color: white; }
+        .btn-confirm { background: var(--color-ready); color: white; }
+        .btn-danger { background: #dc2626; color: white; }
+    </style>
+</head>
+<body>
+
+    <button class="hamburger" onclick="toggleSidebar()">
+        <div></div><div></div><div></div>
+    </button>
+
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Custom Modal Structure -->
+    <div class="custom-modal-wrap" id="custom-modal">
+        <div class="custom-modal-content">
+            <h3 id="modal-title">Title</h3>
+            <div class="custom-modal-body" id="modal-body"></div>
+            <div class="custom-modal-actions" id="modal-actions">
+                <button class="btn-cancel" id="modal-cancel">Cancel</button>
+                <button class="btn-confirm" id="modal-confirm">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <!-- Switched Positions: History first, Exercise second -->
+            <button class="tab-btn active" id="tab-hist" onclick="switchTab('history')">History</button>
+            <button class="tab-btn" id="tab-ex" onclick="switchTab('exercise')">Workout Routine</button>
+        </div>
+        <div class="sidebar-content" id="sidebar-content">
+            <!-- Content Injected via JS -->
+        </div>
+    </div>
+
+    <!-- Main Workout UI -->
+    <div id="workout-ui" style="display: flex; flex-direction: column; height: 100dvh;">
+        <div class="top-bar">
+            TOTAL ELAPSED TIME <br>
+            <span id="total-time">00:00</span>
+        </div>
+        
+        <div class="center-stage">
+            <button id="main-btn" class="circle-btn">
+                <div id="item-title">READY</div>
+                <div id="item-subtitle">Tap to start workout</div>
+                <div id="item-time">GO</div>
+            </button>
+        </div>
+
+        <div class="bottom-bar">
+            NEXT UP <br>
+            <span id="next-item">Loading...</span>
+        </div>
+    </div>
+
+    <!-- Summary UI -->
+    <div id="summary-screen">
+        <h2>Session Report</h2>
+        <textarea id="summary-text" readonly></textarea>
+        <button class="action-btn" onclick="copySummaryText()">Copy Log to Clipboard</button>
+        <button class="action-btn" style="background-color: #222;" onclick="location.reload()">Start New Session</button>
+    </div>
+
+    <script>
+        // ==========================================
+        //         PERSISTENCE & STORAGE
+        // ==========================================
+        const DEFAULT_ROUTINE = [
+            { title: "Warm up", sets: 1, time: 180, rest: false }, 
+            { title: "Surya Namaskar", sets: 3, rest: false },
+            { title: "Wall Push ups", sets: 3 },
+            { title: "Squats", sets: 3 },
+            { title: "Rows", sets: 3 },
+            { title: "Plank", sets: 2, customRest: 60, time: 45 },
+            { title: "Hollow Hold", sets: 2, customRest: 60, time: 45 }
+        ];
+
+        let ROUTINE = JSON.parse(localStorage.getItem('workout_routine')) || DEFAULT_ROUTINE;
+        let HISTORY = JSON.parse(localStorage.getItem('workout_history')) || [];
+        
+        const DEFAULT_SETTINGS = {
+            restTime: 90,
+            restBetweenExercises: false,
+            transitionDelay: 3,
+            historyRetentionDays: 30 // Added history retention limit
+        };
+        
+        // Merge stored settings with defaults to ensure new keys exist
+        let storedSettings = JSON.parse(localStorage.getItem('workout_settings')) || {};
+        let SETTINGS = { ...DEFAULT_SETTINGS, ...storedSettings };
+
+        // State Vars
+        let sequence = [];
+        let currentIndex = -1;
+        let records = [];
+        let totalStartTime = null;
+        let stepStartTime = null;
+        let mainInterval = null;
+        let audioCtx = null;
+        let beepInterval = null;
+        let isBeeping = false;
+        let wakeLock = null;
+        let currentTab = 'history'; // Default tab
+        let historySortOrder = 'newest'; // 'newest' or 'oldest'
+        let isFinished = false; // Prevents double logging
+
+        // DOM Elements
+        const elTotalTime = document.getElementById('total-time');
+        const elBtn = document.getElementById('main-btn');
+        const elTitle = document.getElementById('item-title');
+        const elSubtitle = document.getElementById('item-subtitle');
+        const elTime = document.getElementById('item-time');
+        const elNext = document.getElementById('next-item');
+        const uiWorkout = document.getElementById('workout-ui');
+        const uiSummary = document.getElementById('summary-screen');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const sidebarContent = document.getElementById('sidebar-content');
+
+        // Initial Data Cleanup
+        function cleanHistory() {
+            const cutoff = Date.now() - (SETTINGS.historyRetentionDays * 24 * 60 * 60 * 1000);
+            HISTORY = HISTORY.filter(item => item.timestamp >= cutoff);
+            localStorage.setItem('workout_history', JSON.stringify(HISTORY));
+        }
+
+        function saveRoutine() {
+            localStorage.setItem('workout_routine', JSON.stringify(ROUTINE));
+            sequence = buildSequence();
+            renderSidebar();
+            updateNextPreview();
+        }
+
+        function saveSettings() {
+            localStorage.setItem('workout_settings', JSON.stringify(SETTINGS));
+            cleanHistory();
+            sequence = buildSequence();
+            updateNextPreview();
+        }
+
+        function saveHistoryData() {
+            localStorage.setItem('workout_history', JSON.stringify(HISTORY));
+        }
+
+        // ==========================================
+        //             CUSTOM MODAL LOGIC
+        // ==========================================
+        function showModal(title, bodyHtml, onConfirm, confirmText = "Confirm", isDanger = false, showCancel = true) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-body').innerHTML = bodyHtml;
+            
+            const btnCancel = document.getElementById('modal-cancel');
+            const btnConfirm = document.getElementById('modal-confirm');
+            
+            btnCancel.style.display = showCancel ? 'block' : 'none';
+            btnCancel.onclick = closeModal;
+            
+            btnConfirm.innerText = confirmText;
+            btnConfirm.className = isDanger ? 'btn-danger' : 'btn-confirm';
+            btnConfirm.onclick = () => {
+                if (onConfirm) onConfirm();
+                closeModal();
+            };
+            
+            document.getElementById('custom-modal').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').classList.remove('open');
+        }
+
+        // ==========================================
+        //             SIDEBAR / UI LOGIC
+        // ==========================================
+        function toggleSidebar() {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('open');
+            if(sidebar.classList.contains('open')) renderSidebar();
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.getElementById('tab-ex').classList.toggle('active', tab === 'exercise');
+            document.getElementById('tab-hist').classList.toggle('active', tab === 'history');
+            renderSidebar();
+        }
+
+        function updateSetting(key, value) {
+            if (typeof value === 'boolean') SETTINGS[key] = value;
+            else SETTINGS[key] = parseInt(value) || 0;
+            saveSettings();
+        }
+
+        function renderSidebar() {
+            sidebarContent.innerHTML = '';
+            
+            if (currentTab === 'exercise') {
+                // Settings Header
+                const settingsDiv = document.createElement('div');
+                settingsDiv.className = 'settings-panel';
+                settingsDiv.innerHTML = `
+                    <div class="settings-title">Global Settings</div>
+                    <div class="setting-row">
+                        <span>Rest Between Exercises</span>
+                        <label class="switch">
+                            <input type="checkbox" ${SETTINGS.restBetweenExercises ? 'checked' : ''} onchange="updateSetting('restBetweenExercises', this.checked)">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-row">
+                        <span>Universal Rest (sec)</span>
+                        <input type="number" value="${SETTINGS.restTime}" onchange="updateSetting('restTime', this.value)">
+                    </div>
+                    <div class="setting-row">
+                        <span>Transition Delay (sec)</span>
+                        <input type="number" value="${SETTINGS.transitionDelay}" onchange="updateSetting('transitionDelay', this.value)">
+                    </div>
+                    <div class="setting-row">
+                        <span>Keep History For (Days)</span>
+                        <input type="number" value="${SETTINGS.historyRetentionDays}" onchange="updateSetting('historyRetentionDays', this.value)">
+                    </div>
+                `;
+                sidebarContent.appendChild(settingsDiv);
+
+                const btn = document.createElement('button');
+                btn.className = 'add-btn-style';
+                btn.innerText = '+ Add New Exercise';
+                btn.onclick = () => showExerciseForm();
+                sidebarContent.appendChild(btn);
+
+                ROUTINE.forEach((ex, idx) => {
+                    const div = document.createElement('div');
+                    div.className = 'ex-item';
+                    div.innerHTML = `
+                        <div class="ex-info">
+                            <strong>${ex.title}</strong>
+                            <div>${ex.sets} sets ${ex.time ? `• ${ex.time}s hold` : ''}</div>
+                            <div style="font-size:0.7rem">${ex.rest === false ? 'No Rest' : (ex.customRest ? `Rest: ${ex.customRest}s` : 'Rest: Global')}</div>
+                        </div>
+                        <div class="ex-actions">
+                            <button title="Move Up" onclick="moveExercise(${idx}, -1)">↑</button>
+                            <button title="Move Down" onclick="moveExercise(${idx}, 1)">↓</button>
+                            <button title="Edit" onclick="showExerciseForm(${idx})">✎</button>
+                            <button title="Delete" onclick="deleteExerciseVerify(${idx})">✕</button>
+                        </div>
+                    `;
+                    sidebarContent.appendChild(div);
+                });
+            } else {
+                // HISTORY TAB
+                const histHeader = document.createElement('div');
+                histHeader.className = 'settings-title';
+                histHeader.innerHTML = `
+                    <span>Workout Logs</span>
+                    <div>
+                        <button style="background:none; border:none; color:var(--color-ready); cursor:pointer; margin-right: 10px;" onclick="addManualHistory()">+ Add</button>
+                        <button style="background:none; border:none; color:var(--text-muted); cursor:pointer;" onclick="toggleHistorySort()">⇅ ${historySortOrder === 'newest' ? 'New-Old' : 'Old-New'}</button>
+                    </div>
+                `;
+                sidebarContent.appendChild(histHeader);
+
+                if(HISTORY.length === 0) {
+                    sidebarContent.innerHTML += '<div style="color:var(--text-muted); text-align:center; padding:20px;">No workout logs found.</div>';
+                }
+
+                let displayHistory = [...HISTORY];
+                if (historySortOrder === 'oldest') displayHistory.reverse();
+
+                displayHistory.forEach(item => {
+                    // Find actual index in HISTORY array for operations
+                    const realIndex = HISTORY.indexOf(item); 
+                    const div = document.createElement('details');
+                    div.className = 'history-item';
+                    div.innerHTML = `
+                        <summary>
+                            ${item.date} 
+                            <span style="float:right; font-weight:normal; font-size:0.75rem; color:var(--text-muted)">▶ Expand</span>
+                        </summary>
+                        <div class="history-content">
+                            <pre>${item.summary}</pre>
+                            <div class="history-actions">
+                                <button onclick="copySpecificHistory('${escapeHtml(item.summary)}')">Copy</button>
+                                <button onclick="editHistory(${realIndex})">Edit</button>
+                                <button style="background:#dc2626" onclick="deleteHistoryVerify(${realIndex})">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                    sidebarContent.appendChild(div);
+                });
+            }
+        }
+
+        // --- Exercise Management ---
+        function moveExercise(idx, dir) {
+            if (idx + dir < 0 || idx + dir >= ROUTINE.length) return;
+            const temp = ROUTINE[idx];
+            ROUTINE[idx] = ROUTINE[idx + dir];
+            ROUTINE[idx + dir] = temp;
+            saveRoutine();
+        }
+
+        function showExerciseForm(index = -1) {
+            const ex = index >= 0 ? ROUTINE[index] : { title: '', sets: 3, time: '', rest: true, customRest: '' };
+            sidebarContent.innerHTML = `
+                <div class="settings-title">${index >= 0 ? 'Edit Exercise' : 'New Exercise'}</div>
+                <div class="form-group">
+                    <label>Exercise Title</label>
+                    <input type="text" id="form-title" value="${ex.title}" placeholder="e.g. Push ups">
+                </div>
+                <div class="form-group">
+                    <label>Number of Sets</label>
+                    <input type="number" id="form-sets" value="${ex.sets}">
+                </div>
+                <div class="form-group">
+                    <label>Hold Time (seconds, optional)</label>
+                    <input type="number" id="form-time" value="${ex.time || ''}" placeholder="Leave blank for manual">
+                </div>
+                <div class="form-group">
+                    <label>Custom Rest (seconds, optional)</label>
+                    <input type="number" id="form-custom-rest" value="${ex.customRest || ''}" placeholder="Leave blank for global">
+                </div>
+                <div class="form-group">
+                    <label><input type="checkbox" id="form-rest" ${ex.rest !== false ? 'checked' : ''}> Enable rest between sets</label>
+                </div>
+                <button class="action-btn" style="width:100%" onclick="saveExerciseForm(${index})">Save Exercise</button>
+                <button class="action-btn" style="width:100%; background:#444" onclick="renderSidebar()">Cancel</button>
+            `;
+        }
+
+        function saveExerciseForm(index) {
+            const newEx = {
+                title: document.getElementById('form-title').value || 'Untitled',
+                sets: parseInt(document.getElementById('form-sets').value) || 1,
+                time: parseInt(document.getElementById('form-time').value) || null,
+                customRest: parseInt(document.getElementById('form-custom-rest').value) || null,
+                rest: document.getElementById('form-rest').checked
+            };
+            if (index >= 0) ROUTINE[index] = newEx;
+            else ROUTINE.push(newEx);
+            saveRoutine();
+        }
+
+        function deleteExerciseVerify(index) {
+            showModal("Delete Exercise", `Are you sure you want to remove <strong>${ROUTINE[index].title}</strong> from your routine?`, () => {
+                ROUTINE.splice(index, 1);
+                saveRoutine();
+            }, "Delete", true);
+        }
+
+        // --- History Management ---
+        function toggleHistorySort() {
+            historySortOrder = historySortOrder === 'newest' ? 'oldest' : 'newest';
+            renderSidebar();
+        }
+
+        function addManualHistory() {
+            showModal("Add Manual Log", `
+                <div class="form-group">
+                    <label>Date / Title</label>
+                    <input type="text" id="hist-title" value="${new Date().toLocaleDateString()} Manual Log">
+                </div>
+                <div class="form-group">
+                    <label>Workout Summary</label>
+                    <textarea id="hist-summary" placeholder="Paste or type workout data here..."></textarea>
+                </div>
+            `, () => {
+                const dateVal = document.getElementById('hist-title').value;
+                const sumVal = document.getElementById('hist-summary').value;
+                if(!dateVal || !sumVal) return;
+                
+                HISTORY.unshift({
+                    id: Date.now().toString(),
+                    timestamp: Date.now(),
+                    date: dateVal,
+                    summary: sumVal
+                });
+                saveHistoryData();
+                renderSidebar();
+            }, "Save Log");
+        }
+
+        function editHistory(index) {
+            const item = HISTORY[index];
+            showModal("Edit Log", `
+                <div class="form-group">
+                    <label>Date / Title</label>
+                    <input type="text" id="hist-title" value="${item.date}">
+                </div>
+                <div class="form-group">
+                    <label>Workout Summary</label>
+                    <textarea id="hist-summary">${item.summary}</textarea>
+                </div>
+            `, () => {
+                HISTORY[index].date = document.getElementById('hist-title').value;
+                HISTORY[index].summary = document.getElementById('hist-summary').value;
+                saveHistoryData();
+                renderSidebar();
+            }, "Update");
+        }
+
+        function deleteHistoryVerify(index) {
+            showModal("Delete Log", "Are you sure you want to delete this log? This cannot be undone.", () => {
+                HISTORY.splice(index, 1);
+                saveHistoryData();
+                renderSidebar();
+            }, "Delete", true);
+        }
+
+        function copySpecificHistory(text) {
+            const temp = document.createElement('textarea');
+            temp.value = text.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#039;/g, "'");
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showModal("Copied", "Log copied to clipboard!", null, "OK", false, false);
+        }
+
+        function escapeHtml(text) {
+            return text
+                 .replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
+        }
+
+        // ==========================================
+        //             WORKOUT ENGINE
+        // ==========================================
+        function buildSequence() {
+            let seq = [];
+            for (let i = 0; i < ROUTINE.length; i++) {
+                let ex = ROUTINE[i];
+                let exRestEnabled = ex.hasOwnProperty('rest') ? ex.rest : true;
+                let exRestDuration = ex.customRest || SETTINGS.restTime;
+
+                for (let s = 1; s <= ex.sets; s++) {
+                    seq.push({
+                        type: 'EXERCISE',
+                        title: ex.title,
+                        set: s,
+                        totalSets: ex.sets,
+                        targetTime: ex.time || null
+                    });
+
+                    let isLastSet = (s === ex.sets);
+                    let isLastExercise = (i === ROUTINE.length - 1);
+
+                    if (!isLastSet && exRestEnabled) {
+                        seq.push({
+                            type: 'REST',
+                            title: 'Rest',
+                            targetTime: exRestDuration,
+                            nextInfo: `${ex.title} (Set ${s + 1})`
+                        });
+                    } else if (isLastSet && !isLastExercise && SETTINGS.restBetweenExercises) {
+                        seq.push({
+                            type: 'REST',
+                            title: 'Rest',
+                            targetTime: SETTINGS.restTime,
+                            nextInfo: `${ROUTINE[i+1].title}`
+                        });
+                    }
+                }
+            }
+            return seq;
+        }
+
+        function formatTime(seconds, forcePositiveSign = false) {
+            let isNegative = seconds < 0;
+            seconds = Math.abs(seconds);
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const s = Math.floor(seconds % 60).toString().padStart(2, '0');
+            let prefix = '';
+            if (isNegative) prefix = '-';
+            else if (forcePositiveSign) prefix = '+';
+            return `${prefix}${m}:${s}`;
+        }
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+
+        function startBeeping() {
+            if (isBeeping) return;
+            isBeeping = true;
+            beepInterval = setInterval(() => {
+                if(!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = 500; 
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                osc.stop(audioCtx.currentTime + 0.3);
+            }, 1000);
+        }
+
+        function stopBeeping() {
+            if (beepInterval) clearInterval(beepInterval);
+            beepInterval = null;
+            isBeeping = false;
+        }
+
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                }
+            } catch (err) { console.log('Wake Lock error:', err); }
+        }
+
+        function updateDisplay() {
+            if (totalStartTime) {
+                const totalElapsed = (Date.now() - totalStartTime) / 1000;
+                elTotalTime.innerText = formatTime(totalElapsed);
+            }
+
+            if (currentIndex >= 0 && currentIndex < sequence.length) {
+                const step = sequence[currentIndex];
+                const stepElapsed = (Date.now() - stepStartTime) / 1000;
+
+                if (step.targetTime) {
+                    let remaining = step.targetTime - stepElapsed;
+                    if (remaining <= 0) {
+                        elTime.innerText = "00:00";
+                        startBeeping();
+                    } else {
+                        elTime.innerText = formatTime(-remaining);
+                    }
+                } else {
+                    elTime.innerText = formatTime(stepElapsed, true);
+                }
+            }
+        }
+
+        function updateNextPreview() {
+            elNext.innerText = getNextLabel(currentIndex);
+        }
+
+        function getNextLabel(index) {
+            if (index + 1 < sequence.length) {
+                let n = sequence[index + 1];
+                if (n.type === 'REST') return `Next: Rest (${formatTime(n.targetTime)})`;
+                return `Next: ${n.title} (Set ${n.set}/${n.totalSets})`;
+            }
+            return "Final Step";
+        }
+
+        function advanceStep() {
+            if (isFinished) return; // Prevent extra clicks firing after finish
+
+            initAudio();
+            stopBeeping();
+            
+            if (currentIndex === -1) {
+                totalStartTime = Date.now();
+                requestWakeLock();
+                mainInterval = setInterval(updateDisplay, 100);
+            } else if (currentIndex < sequence.length) {
+                const step = sequence[currentIndex];
+                if (step) {
+                    let elapsed = (Date.now() - stepStartTime) / 1000;
+                    if (step.type === 'EXERCISE' && !step.targetTime) {
+                        elapsed = Math.max(0, elapsed - SETTINGS.transitionDelay);
+                    }
+                    records.push({
+                        type: step.type,
+                        title: step.title,
+                        set: step.set,
+                        duration: elapsed
+                    });
+                }
+            }
+
+            currentIndex++;
+
+            if (currentIndex >= sequence.length) {
+                finishWorkout();
+                return;
+            }
+
+            const step = sequence[currentIndex];
+            stepStartTime = Date.now();
+            
+            elBtn.className = 'circle-btn';
+            if (step.type === 'EXERCISE') {
+                elBtn.classList.add('state-exercise');
+                elTitle.innerText = step.title;
+                elSubtitle.innerText = `Set ${step.set} of ${step.totalSets}`;
+            } else {
+                elBtn.classList.add('state-rest');
+                elTitle.innerText = "REST";
+                elSubtitle.innerText = `Preparing for: ${step.nextInfo}`;
+            }
+
+            elTime.innerText = step.targetTime ? formatTime(-step.targetTime) : "+00:00";
+            updateNextPreview();
+        }
+
+        function finishWorkout() {
+            isFinished = true; // Block further advances
+            if (mainInterval) clearInterval(mainInterval);
+            elBtn.className = 'circle-btn state-done';
+            elTitle.innerText = "COMPLETE";
+            elSubtitle.innerText = "Session finished!";
+            elTime.innerText = "";
+            elNext.innerText = "Creating report...";
+            
+            setTimeout(generateSummaryText, 1000);
+        }
+
+        function generateSummaryText() {
+            uiWorkout.style.display = 'none';
+            uiSummary.style.display = 'flex';
+
+            const now = new Date();
+            const dateStr = now.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+            const startStr = new Date(totalStartTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const endStr = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const totalDur = formatTime((now - totalStartTime) / 1000);
+
+            let txt = `Workout Log: ${dateStr}\n`;
+            txt += `Timeline: ${startStr} - ${endStr}\n`;
+            txt += `Total Duration: ${totalDur}\n\n`;
+
+            records.forEach(r => {
+                if (r.type === 'REST') {
+                    txt += `[Rest] ${formatTime(r.duration)}\n`;
+                } else {
+                    txt += `${r.title} (Set ${r.set}): ${formatTime(r.duration)}\n`;
+                }
+            });
+            
+            txt += `\n*Manual sets include a -${SETTINGS.transitionDelay}s delay correction.*`;
+
+            document.getElementById('summary-text').value = txt;
+            
+            // Single append to history
+            HISTORY.unshift({
+                id: Date.now().toString(),
+                timestamp: Date.now(),
+                date: dateStr + ' ' + startStr,
+                summary: txt
+            });
+            saveHistoryData();
+        }
+
+        function copySummaryText() {
+            const txt = document.getElementById('summary-text');
+            txt.select();
+            txt.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            showModal("Copied", "Log copied to clipboard!", null, "OK", false, false);
+        }
+
+        window.onload = () => {
+            cleanHistory(); // Remove old entries on load based on settings
+            sequence = buildSequence();
+            updateNextPreview();
+            elBtn.addEventListener('click', advanceStep);
+            renderSidebar();
+        };
+    </script>
+</body>
+</html>
