@@ -3,293 +3,285 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Workout Tracker</title>
+<title>Modern Workout Tracker</title>
 <style>
 /* Modern Black Theme & Base Styles */
 :root {
-    --bg-color: #0a0a0a;
-    --surface-color: #1a1a1a;
-    --text-main: #ffffff;
-    --text-muted: #888888;
-    
-    /* Color Codes */
-    --c-blue: #3b82f6;
-    --c-green: #22c55e;
-    --c-orange: #f97316;
-    --c-purple: #a855f7;
-    --c-red: #ef4444;
-    --c-pink: #ec4899;
-    --c-yellow: #eab308;
-    --c-teal: #14b8a6;
-    --c-cyan: #06b6d4;
-
-    --sidebar-width: 300px;
+--bg-color: #0a0a0a;
+--surface-color: #1a1a1a;
+--text-main: #ffffff;
+--text-muted: #888888;
+/* Color Codes */
+--c-blue: #3b82f6;
+--c-green: #22c55e;
+--c-orange: #f97316;
+--c-purple: #a855f7;
+--c-red: #ef4444;
+--c-pink: #ec4899;
+--c-yellow: #eab308;
+--c-teal: #14b8a6;
+--c-cyan: #06b6d4;
+--sidebar-width: 300px;
 }
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+user-select: none;
+-webkit-tap-highlight-color: transparent;
 }
 body {
-    background-color: var(--bg-color);
-    color: var(--text-main);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+background-color: var(--bg-color);
+color: var(--text-main);
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+height: 100dvh;
+display: flex;
+flex-direction: column;
+overflow: hidden;
 }
 /* Sidebar & Navigation */
 .hamburger {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 1000;
-    background: rgba(0,0,0,0.5);
-    border: none;
-    cursor: pointer;
-    padding: 10px;
-    border-radius: 8px;
+position: absolute;
+top: 20px;
+left: 20px;
+z-index: 1000;
+background: rgba(0,0,0,0.5);
+border: none;
+cursor: pointer;
+padding: 10px;
+border-radius: 8px;
 }
 .hamburger div {
-    width: 25px;
-    height: 2px;
-    background-color: var(--text-main);
-    margin: 5px 0;
-    transition: 0.3s;
+width: 25px;
+height: 2px;
+background-color: var(--text-main);
+margin: 5px 0;
+transition: 0.3s;
 }
 .sidebar {
-    position: fixed;
-    top: 0;
-    left: calc(-1 * var(--sidebar-width));
-    width: var(--sidebar-width);
-    height: 100%;
-    background: var(--surface-color);
-    z-index: 999;
-    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    flex-direction: column;
-    box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+position: fixed;
+top: 0;
+left: calc(-1 * var(--sidebar-width));
+width: var(--sidebar-width);
+height: 100%;
+background: var(--surface-color);
+z-index: 999;
+transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+display: flex;
+flex-direction: column;
+box-shadow: 5px 0 15px rgba(0,0,0,0.5);
 }
 .sidebar.open { left: 0; }
 .sidebar-header {
-    padding: 75px 20px 20px 20px; 
-    border-bottom: 1px solid #333;
-    display: flex;
-    gap: 10px;
+padding: 75px 20px 20px 20px; 
+border-bottom: 1px solid #333;
+display: flex;
+gap: 10px;
 }
 .tab-btn {
-    flex: 1;
-    padding: 10px;
-    background: transparent;
-    border: 1px solid #444;
-    color: var(--text-muted);
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.8rem;
+flex: 1;
+padding: 10px;
+background: transparent;
+border: 1px solid #444;
+color: var(--text-muted);
+border-radius: 8px;
+cursor: pointer;
+font-size: 0.8rem;
 }
 .tab-btn.active {
-    background: var(--c-blue);
-    color: white;
-    border-color: var(--c-blue);
+background: var(--c-blue);
+color: white;
+border-color: var(--c-blue);
 }
 .sidebar-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
+flex: 1;
+overflow-y: auto;
+padding: 20px;
 }
-
 /* Settings Section */
 details.settings-panel {
-    background: #111;
-    padding: 15px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    border: 1px solid #222;
+background: #111;
+padding: 15px;
+border-radius: 12px;
+margin-bottom: 20px;
+border: 1px solid #222;
 }
 details.settings-panel > summary {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    letter-spacing: 1px;
-    cursor: pointer;
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    outline: none;
+font-size: 0.75rem;
+text-transform: uppercase;
+color: var(--text-muted);
+letter-spacing: 1px;
+cursor: pointer;
+list-style: none;
+display: flex;
+justify-content: space-between;
+align-items: center;
+outline: none;
 }
 details.settings-panel > summary::-webkit-details-marker { display: none; }
 details.settings-panel > summary::after { content: "▼"; font-size: 0.8em; }
 details.settings-panel[open] > summary::after { content: "▲"; }
-
 .settings-content { margin-top: 15px; }
-
 .setting-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-    font-size: 0.85rem;
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 12px;
+font-size: 0.85rem;
 }
 .setting-row select, .setting-row input[type="number"] {
-    width: 70px;
-    background: #222;
-    border: 1px solid #444;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    text-align: center;
+width: 70px;
+background: #222;
+border: 1px solid #444;
+color: white;
+padding: 4px 8px;
+border-radius: 4px;
+text-align: center;
 }
-
 /* Exercise List & Form Styles */
 .ex-item {
-    background: #222;
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-left: 4px solid var(--c-green);
+background: #222;
+padding: 12px;
+border-radius: 8px;
+margin-bottom: 10px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+border-left: 4px solid var(--c-green);
 }
 .ex-info { flex: 1; }
 .ex-info div { font-size: 0.8rem; color: var(--text-muted); }
 .ex-actions {
-    display: flex;
-    gap: 5px;
+display: flex;
+gap: 5px;
 }
 .ex-actions button {
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    padding: 5px;
-    cursor: pointer;
-    font-size: 1.1rem;
-    border-radius: 4px;
-    transition: 0.2s;
+background: none;
+border: none;
+color: var(--text-muted);
+padding: 5px;
+cursor: pointer;
+font-size: 1.1rem;
+border-radius: 4px;
+transition: 0.2s;
 }
 .ex-actions button:active { background: #444; }
 .add-btn-style {
-    width: 100%;
-    padding: 12px;
-    background: #333;
-    border: 1px dashed #555;
-    color: white;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    cursor: pointer;
+width: 100%;
+padding: 12px;
+background: #333;
+border: 1px dashed #555;
+color: white;
+border-radius: 8px;
+margin-bottom: 20px;
+cursor: pointer;
 }
 .form-group { margin-bottom: 15px; }
 .form-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; }
 .form-group input, .form-group textarea, .form-group select {
-    width: 100%;
-    padding: 10px;
-    background: #111;
-    border: 1px solid #444;
-    color: white;
-    border-radius: 6px;
-    font-family: inherit;
+width: 100%;
+padding: 10px;
+background: #111;
+border: 1px solid #444;
+color: white;
+border-radius: 6px;
+font-family: inherit;
 }
 .form-group textarea { resize: vertical; min-height: 100px; }
 .form-group input[type="checkbox"] { width: auto; margin-right: 8px; vertical-align: middle; }
-
 /* History Accordion Styles */
 details.history-item {
-    background: #222;
-    border-left: 3px solid var(--c-purple);
-    margin-bottom: 10px;
-    border-radius: 4px;
-    overflow: hidden;
+background: #222;
+border-left: 3px solid var(--c-purple);
+margin-bottom: 10px;
+border-radius: 4px;
+overflow: hidden;
 }
 details.history-item > summary {
-    padding: 12px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 0.85rem;
-    list-style: none;
-    outline: none;
+padding: 12px;
+cursor: pointer;
+font-weight: bold;
+font-size: 0.85rem;
+list-style: none;
+outline: none;
 }
 details.history-item > summary::-webkit-details-marker { display: none; }
 details.history-item > summary:active { background: #333; }
 .history-content {
-    padding: 0 12px 12px 12px;
-    font-size: 0.75rem;
-    color: var(--text-muted);
+padding: 0 12px 12px 12px;
+font-size: 0.75rem;
+color: var(--text-muted);
 }
 .history-content pre {
-    white-space: pre-wrap;
-    font-family: inherit;
-    margin-bottom: 10px;
+white-space: pre-wrap;
+font-family: inherit;
+margin-bottom: 10px;
 }
 .history-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 10px;
-    border-top: 1px solid #333;
-    padding-top: 10px;
+display: flex;
+gap: 8px;
+margin-top: 10px;
+border-top: 1px solid #333;
+padding-top: 10px;
 }
 .history-actions button {
-    flex: 1;
-    background: #333;
-    color: white;
-    border: none;
-    padding: 6px;
-    border-radius: 4px;
-    cursor: pointer;
+flex: 1;
+background: #333;
+color: white;
+border: none;
+padding: 6px;
+border-radius: 4px;
+cursor: pointer;
 }
-
 /* Top Bar */
 .top-bar {
-    padding: 8dvh 5vw 2dvh 5vw;
-    text-align: center;
-    font-size: 4vw;
-    color: var(--text-muted);
-    letter-spacing: 1px;
+padding: 8dvh 5vw 2dvh 5vw;
+text-align: center;
+font-size: 4vw;
+color: var(--text-muted);
+letter-spacing: 1px;
 }
 @media (min-width: 768px) {
-    .top-bar { font-size: 1rem; }
+.top-bar { font-size: 1rem; }
 }
 .top-bar #total-time {
-    color: var(--text-main);
-    font-weight: bold;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 2.2rem; /* Increased size */
+color: var(--text-main);
+font-weight: bold;
+font-family: 'Courier New', Courier, monospace;
+font-size: 3rem; /* Increased size */
 }
-
 /* Center Stage - Main Button */
 .center-stage {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2dvh 5vw;
+flex: 1;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+padding: 2dvh 5vw;
+gap: 3dvh;
 }
 .circle-btn {
-    width: 80vw;
-    max-width: 350px;
-    aspect-ratio: 1 / 1;
-    border-radius: 50%;
-    background-color: var(--surface-color);
-    border: 1.5vw solid var(--c-blue);
-    box-shadow: 0 0 40px rgba(59, 130, 246, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    outline: none;
-    color: var(--text-main);
-    position: relative;
+width: 80vw;
+max-width: 350px;
+aspect-ratio: 1 / 1;
+border-radius: 50%;
+background-color: var(--surface-color);
+border: 1.5vw solid var(--c-blue);
+box-shadow: 0 0 40px rgba(59, 130, 246, 0.1);
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+transition: all 0.3s ease;
+outline: none;
+color: var(--text-main);
+position: relative;
 }
 @media (min-width: 768px) {
-    .circle-btn { border-width: 10px; }
+.circle-btn { border-width: 10px; }
 }
 .circle-btn:active { transform: scale(0.96); }
-
 /* Custom Color Classes */
 .circle-btn.color-blue { border-color: var(--c-blue); box-shadow: 0 0 50px rgba(59, 130, 246, 0.2); }
 .circle-btn.color-green { border-color: var(--c-green); box-shadow: 0 0 50px rgba(34, 197, 94, 0.2); }
@@ -300,147 +292,173 @@ details.history-item > summary:active { background: #333; }
 .circle-btn.color-yellow { border-color: var(--c-yellow); box-shadow: 0 0 50px rgba(234, 179, 8, 0.2); }
 .circle-btn.color-teal { border-color: var(--c-teal); box-shadow: 0 0 50px rgba(20, 184, 166, 0.2); }
 .circle-btn.color-cyan { border-color: var(--c-cyan); box-shadow: 0 0 50px rgba(6, 182, 212, 0.2); }
-
 #item-title { font-size: 8vw; font-weight: 700; text-align: center; padding: 0 5vw; margin-bottom: 1dvh; }
 #item-subtitle { font-size: 4vw; color: var(--text-muted); margin-bottom: 2dvh; }
 #item-time { font-size: 16vw; font-weight: 800; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; line-height: 1; }
-
 @media (min-width: 768px) {
-    #item-title { font-size: 2.2rem; }
-    #item-subtitle { font-size: 1rem; }
-    #item-time { font-size: 5rem; }
+#item-title { font-size: 2.2rem; }
+#item-subtitle { font-size: 1rem; }
+#item-time { font-size: 5rem; }
+}
+
+/* Controls Container */
+.controls-container {
+display: flex;
+justify-content: center;
+gap: 20px;
+}
+.control-btn {
+width: 50px;
+height: 50px;
+border-radius: 50%;
+background-color: #1a1a1a;
+border: 2px solid #333;
+color: var(--text-muted);
+font-size: 1.2rem;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+transition: all 0.2s ease;
+outline: none;
+}
+.control-btn:active {
+transform: scale(0.9);
+background-color: #222;
+}
+.control-btn.paused {
+background-color: var(--c-orange);
+border-color: var(--c-orange);
+color: #000;
 }
 
 /* Bottom Bar Updates */
 .bottom-bar {
-    padding: 3dvh 5vw 4dvh 5vw;
-    text-align: center;
-    background: linear-gradient(to top, #000 0%, transparent 100%);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: 12dvh;
+padding: 3dvh 5vw 4dvh 5vw;
+text-align: center;
+background: linear-gradient(to top, #000 0%, transparent 100%);
+display: flex;
+flex-direction: column;
+justify-content: center;
+min-height: 12dvh;
 }
 #next-immediate {
-    color: var(--text-main);
-    font-weight: 700;
-    font-size: 6vw; /* Increased */
-    margin-bottom: 4px;
+color: var(--text-main);
+font-weight: 700;
+font-size: 6.5vw; /* Increased */
+margin-bottom: 6px;
 }
 #next-upcoming {
-    color: var(--text-muted);
-    font-size: 4vw;
+color: var(--text-muted);
+font-size: 4.5vw;
 }
 @media (min-width: 768px) {
-    #next-immediate { font-size: 1.5rem; }
-    #next-upcoming { font-size: 1.1rem; }
+.top-bar #total-time { font-size: 3.5rem; }
+#next-immediate { font-size: 1.8rem; }
+#next-upcoming { font-size: 1.2rem; }
 }
-
 /* Summary Screen */
 #summary-screen {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: var(--bg-color);
-    display: none;
-    flex-direction: column;
-    padding: 5dvh 5vw;
-    z-index: 10;
-    overflow-y: auto;
+position: absolute;
+top: 0; left: 0; right: 0; bottom: 0;
+background-color: var(--bg-color);
+display: none;
+flex-direction: column;
+padding: 5dvh 5vw;
+z-index: 10;
+overflow-y: auto;
 }
 #summary-screen h2 { text-align: center; margin: 2dvh 0; color: var(--c-purple); font-size: 6vw; }
 textarea {
-    flex: 1;
-    background: var(--surface-color);
-    border: 1px solid #333;
-    color: var(--text-main);
-    border-radius: 12px;
-    padding: 15px;
-    font-family: monospace;
-    font-size: 0.9rem;
-    resize: none;
-    margin-bottom: 20px;
-    line-height: 1.5;
-    min-height: 250px;
+flex: 1;
+background: var(--surface-color);
+border: 1px solid #333;
+color: var(--text-main);
+border-radius: 12px;
+padding: 15px;
+font-family: monospace;
+font-size: 0.9rem;
+resize: none;
+margin-bottom: 20px;
+line-height: 1.5;
+min-height: 250px;
 }
 .action-btn {
-    background-color: var(--c-blue);
-    color: white;
-    border: none;
-    padding: 16px;
-    border-radius: 12px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    margin-bottom: 10px;
+background-color: var(--c-blue);
+color: white;
+border: none;
+padding: 16px;
+border-radius: 12px;
+font-size: 1rem;
+font-weight: bold;
+cursor: pointer;
+margin-bottom: 10px;
 }
-
 .overlay {
-    position: fixed;
-    top:0; left:0; right:0; bottom:0;
-    background: rgba(0,0,0,0.8);
-    z-index: 998;
-    display: none;
+position: fixed;
+top:0; left:0; right:0; bottom:0;
+background: rgba(0,0,0,0.8);
+z-index: 998;
+display: none;
 }
 .overlay.open { display: block; }
-
 /* Custom Switch Styling */
 .switch {
-    position: relative;
-    display: inline-block;
-    width: 40px;
-    height: 20px;
+position: relative;
+display: inline-block;
+width: 40px;
+height: 20px;
 }
 .switch input { opacity: 0; width: 0; height: 0; }
 .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: #444;
-    transition: .4s;
-    border-radius: 20px;
+position: absolute;
+cursor: pointer;
+top: 0; left: 0; right: 0; bottom: 0;
+background-color: #444;
+transition: .4s;
+border-radius: 20px;
 }
 .slider:before {
-    position: absolute;
-    content: "";
-    height: 16px; width: 16px;
-    left: 2px; bottom: 2px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
+position: absolute;
+content: "";
+height: 16px; width: 16px;
+left: 2px; bottom: 2px;
+background-color: white;
+transition: .4s;
+border-radius: 50%;
 }
 input:checked + .slider { background-color: var(--c-blue); }
 input:checked + .slider:before { transform: translateX(20px); }
-
 /* Custom Modal */
 .custom-modal-wrap {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.8);
-    z-index: 2000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+position: fixed;
+top: 0; left: 0; right: 0; bottom: 0;
+background: rgba(0,0,0,0.8);
+z-index: 2000;
+display: none;
+align-items: center;
+justify-content: center;
+padding: 20px;
 }
 .custom-modal-wrap.open { display: flex; }
 .custom-modal-content {
-    background: var(--surface-color);
-    border: 1px solid #333;
-    border-radius: 12px;
-    padding: 20px;
-    width: 100%;
-    max-width: 400px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+background: var(--surface-color);
+border: 1px solid #333;
+border-radius: 12px;
+padding: 20px;
+width: 100%;
+max-width: 400px;
+box-shadow: 0 10px 40px rgba(0,0,0,0.8);
 }
 .custom-modal-content h3 { margin-bottom: 15px; font-size: 1.2rem; }
 .custom-modal-body { margin-bottom: 20px; font-size: 0.9rem; color: #ccc; }
 .custom-modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
 .custom-modal-actions button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
+padding: 10px 15px;
+border: none;
+border-radius: 6px;
+cursor: pointer;
+font-weight: bold;
 }
 .btn-cancel { background: #333; color: white; }
 .btn-confirm { background: var(--c-blue); color: white; }
@@ -449,81 +467,80 @@ input:checked + .slider:before { transform: translateX(20px); }
 </head>
 <body>
 <button class="hamburger" onclick="toggleSidebar()">
-    <div></div><div></div><div></div>
+<div></div><div></div><div></div>
 </button>
 <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
-
 <!-- Custom Modal Structure -->
 <div class="custom-modal-wrap" id="custom-modal">
-    <div class="custom-modal-content">
-        <h3 id="modal-title">Title</h3>
-        <div class="custom-modal-body" id="modal-body"></div>
-        <div class="custom-modal-actions" id="modal-actions">
-            <button class="btn-cancel" id="modal-cancel">Cancel</button>
-            <button class="btn-confirm" id="modal-confirm">Confirm</button>
-        </div>
-    </div>
+<div class="custom-modal-content">
+<h3 id="modal-title">Title</h3>
+<div class="custom-modal-body" id="modal-body"></div>
+<div class="custom-modal-actions" id="modal-actions">
+<button class="btn-cancel" id="modal-cancel">Cancel</button>
+<button class="btn-confirm" id="modal-confirm">Confirm</button>
 </div>
-
+</div>
+</div>
 <div class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-        <button class="tab-btn active" id="tab-hist" onclick="switchTab('history')">History</button>
-        <button class="tab-btn" id="tab-ex" onclick="switchTab('exercise')">Workout Routine</button>
-    </div>
-    <div class="sidebar-content" id="sidebar-content"></div>
+<div class="sidebar-header">
+<button class="tab-btn active" id="tab-hist" onclick="switchTab('history')">History</button>
+<button class="tab-btn" id="tab-ex" onclick="switchTab('exercise')">Workout Routine</button>
 </div>
-
+<div class="sidebar-content" id="sidebar-content"></div>
+</div>
 <!-- Main Workout UI -->
 <div id="workout-ui" style="display: flex; flex-direction: column; height: 100dvh;">
-    <div class="top-bar">
-        TOTAL ELAPSED TIME <br>
-        <span id="total-time">00:00</span>
-    </div>
-    <div class="center-stage">
-        <button id="main-btn" class="circle-btn color-blue">
-            <div id="item-title">READY</div>
-            <div id="item-subtitle">Tap to start workout</div>
-            <div id="item-time">GO</div>
-        </button>
-    </div>
-    <div class="bottom-bar">
-        <div id="next-immediate">Loading...</div>
-        <div id="next-upcoming"></div>
-    </div>
+<div class="top-bar">
+TOTAL ELAPSED TIME <br>
+<span id="total-time">00:00</span>
 </div>
-
+<div class="center-stage">
+<button id="main-btn" class="circle-btn color-blue">
+<div id="item-title">READY</div>
+<div id="item-subtitle">Tap to start workout</div>
+<div id="item-time">GO</div>
+</button>
+<div class="controls-container">
+<button class="control-btn" id="btn-pause" onclick="togglePause()" title="Pause / Resume">⏸</button>
+<button class="control-btn" id="btn-skip" onclick="skipStep()" title="Skip Step">⏭</button>
+<button class="control-btn" id="btn-end" onclick="finishWorkout(true)" title="End Session">⏹</button>
+</div>
+</div>
+<div class="bottom-bar">
+<div id="next-immediate">Loading...</div>
+<div id="next-upcoming"></div>
+</div>
+</div>
 <!-- Summary UI -->
 <div id="summary-screen">
-    <h2>Session Report</h2>
-    <textarea id="summary-text" readonly></textarea>
-    <button class="action-btn" onclick="copySummaryText()">Copy Log to Clipboard</button>
-    <button class="action-btn" style="background-color: #222;" onclick="location.reload()">Start New Session</button>
+<h2>Session Report</h2>
+<textarea id="summary-text" readonly></textarea>
+<button class="action-btn" onclick="copySummaryText()">Copy Log to Clipboard</button>
+<button class="action-btn" style="background-color: #222;" onclick="location.reload()">Start New Session</button>
 </div>
-
 <script>
 // ==========================================
 // PERSISTENCE & STORAGE
 // ==========================================
 const DEFAULT_ROUTINE = [
-    { title: "Warm up", sets: 1, time: 180, rest: false, color: 'blue' }, 
-    { title: "Surya Namaskar", sets: 3, rest: false, color: 'green' },
-    { title: "Wall Push ups", sets: 3, color: 'green' },
-    { title: "Squats", sets: 3, prepTime: 10, color: 'cyan' },
-    { title: "Rows", sets: 3, color: 'green' },
-    { title: "Plank", sets: 2, customRest: 60, time: 45, color: 'purple' },
-    { title: "Hollow Hold", sets: 2, customRest: 60, time: 45, color: 'purple' }
+{ title: "Warm up", sets: 1, time: 180, rest: false, color: 'blue' }, 
+{ title: "Surya Namaskar", sets: 3, rest: false, color: 'green' },
+{ title: "Wall Push ups", sets: 3, color: 'green' },
+{ title: "Squats", sets: 3, prepTime: 10, color: 'cyan' },
+{ title: "Rows", sets: 3, color: 'green' },
+{ title: "Plank", sets: 2, customRest: 60, time: 45, color: 'purple' },
+{ title: "Hollow Hold", sets: 2, customRest: 60, time: 45, color: 'purple' }
 ];
 let ROUTINE = JSON.parse(localStorage.getItem('workout_routine')) || DEFAULT_ROUTINE;
 let HISTORY = JSON.parse(localStorage.getItem('workout_history')) || [];
 const DEFAULT_SETTINGS = {
-    restTime: 90,
-    restBetweenExercises: false,
-    transitionDelay: 3,
-    historyRetentionDays: 30
+restTime: 90,
+restBetweenExercises: false,
+transitionDelay: 3,
+historyRetentionDays: 30
 };
 let storedSettings = JSON.parse(localStorage.getItem('workout_settings')) || {};
 let SETTINGS = { ...DEFAULT_SETTINGS, ...storedSettings };
-
 // State Vars
 let sequence = [];
 let currentIndex = -1;
@@ -538,7 +555,9 @@ let wakeLock = null;
 let currentTab = 'history'; 
 let historySortOrder = 'newest'; 
 let isFinished = false; 
-let lastPreBeep = 0; // Tracks which second we last pre-beeped on
+let lastPreBeep = 0; 
+let isPaused = false;
+let pauseTimestamp = 0;
 
 // DOM Elements
 const elTotalTime = document.getElementById('total-time');
@@ -556,538 +575,575 @@ const sidebarContent = document.getElementById('sidebar-content');
 
 // Initial Data Cleanup
 function cleanHistory() {
-    const cutoff = Date.now() - (SETTINGS.historyRetentionDays * 24 * 60 * 60 * 1000);
-    HISTORY = HISTORY.filter(item => item.timestamp >= cutoff);
-    localStorage.setItem('workout_history', JSON.stringify(HISTORY));
+const cutoff = Date.now() - (SETTINGS.historyRetentionDays * 24 * 60 * 60 * 1000);
+HISTORY = HISTORY.filter(item => item.timestamp >= cutoff);
+localStorage.setItem('workout_history', JSON.stringify(HISTORY));
 }
 function saveRoutine() {
-    localStorage.setItem('workout_routine', JSON.stringify(ROUTINE));
-    sequence = buildSequence();
-    renderSidebar();
-    updateNextPreview();
+localStorage.setItem('workout_routine', JSON.stringify(ROUTINE));
+sequence = buildSequence();
+renderSidebar();
+updateNextPreview();
 }
 function saveSettings() {
-    localStorage.setItem('workout_settings', JSON.stringify(SETTINGS));
-    cleanHistory();
-    sequence = buildSequence();
-    updateNextPreview();
+localStorage.setItem('workout_settings', JSON.stringify(SETTINGS));
+cleanHistory();
+sequence = buildSequence();
+updateNextPreview();
 }
 function saveHistoryData() {
-    localStorage.setItem('workout_history', JSON.stringify(HISTORY));
+localStorage.setItem('workout_history', JSON.stringify(HISTORY));
 }
-
 // ==========================================
 // CUSTOM MODAL LOGIC
 // ==========================================
 function showModal(title, bodyHtml, onConfirm, confirmText = "Confirm", isDanger = false, showCancel = true) {
-    document.getElementById('modal-title').innerText = title;
-    document.getElementById('modal-body').innerHTML = bodyHtml;
-    const btnCancel = document.getElementById('modal-cancel');
-    const btnConfirm = document.getElementById('modal-confirm');
-    btnCancel.style.display = showCancel ? 'block' : 'none';
-    btnCancel.onclick = closeModal;
-    btnConfirm.innerText = confirmText;
-    btnConfirm.className = isDanger ? 'btn-danger' : 'btn-confirm';
-    btnConfirm.onclick = () => {
-        if (onConfirm) onConfirm();
-        closeModal();
-    };
-    document.getElementById('custom-modal').classList.add('open');
+document.getElementById('modal-title').innerText = title;
+document.getElementById('modal-body').innerHTML = bodyHtml;
+const btnCancel = document.getElementById('modal-cancel');
+const btnConfirm = document.getElementById('modal-confirm');
+btnCancel.style.display = showCancel ? 'block' : 'none';
+btnCancel.onclick = closeModal;
+btnConfirm.innerText = confirmText;
+btnConfirm.className = isDanger ? 'btn-danger' : 'btn-confirm';
+btnConfirm.onclick = () => {
+if (onConfirm) onConfirm();
+closeModal();
+};
+document.getElementById('custom-modal').classList.add('open');
 }
 function closeModal() { document.getElementById('custom-modal').classList.remove('open'); }
-
 // ==========================================
 // SIDEBAR / UI LOGIC
 // ==========================================
 function toggleSidebar() {
-    sidebar.classList.toggle('open');
-    overlay.classList.toggle('open');
-    if(sidebar.classList.contains('open')) renderSidebar();
+sidebar.classList.toggle('open');
+overlay.classList.toggle('open');
+if(sidebar.classList.contains('open')) renderSidebar();
 }
 function switchTab(tab) {
-    currentTab = tab;
-    document.getElementById('tab-ex').classList.toggle('active', tab === 'exercise');
-    document.getElementById('tab-hist').classList.toggle('active', tab === 'history');
-    renderSidebar();
+currentTab = tab;
+document.getElementById('tab-ex').classList.toggle('active', tab === 'exercise');
+document.getElementById('tab-hist').classList.toggle('active', tab === 'history');
+renderSidebar();
 }
 function updateSetting(key, value) {
-    if (typeof value === 'boolean') SETTINGS[key] = value;
-    else SETTINGS[key] = parseInt(value) || 0;
-    saveSettings();
+if (typeof value === 'boolean') SETTINGS[key] = value;
+else SETTINGS[key] = parseInt(value) || 0;
+saveSettings();
 }
 function renderSidebar() {
-    sidebarContent.innerHTML = '';
-    if (currentTab === 'exercise') {
-        const settingsDiv = document.createElement('details');
-        settingsDiv.className = 'settings-panel';
-        settingsDiv.innerHTML = `
-            <summary>Global Settings</summary>
-            <div class="settings-content">
-                <div class="setting-row">
-                    <span>Rest Between Exercises</span>
-                    <label class="switch">
-                    <input type="checkbox" ${SETTINGS.restBetweenExercises ? 'checked' : ''} onchange="updateSetting('restBetweenExercises', this.checked)">
-                    <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="setting-row">
-                    <span>Universal Rest (sec)</span>
-                    <input type="number" value="${SETTINGS.restTime}" onchange="updateSetting('restTime', this.value)">
-                </div>
-                <div class="setting-row">
-                    <span>Transition Delay (sec)</span>
-                    <input type="number" value="${SETTINGS.transitionDelay}" onchange="updateSetting('transitionDelay', this.value)">
-                </div>
-            </div>
-        `;
-        sidebarContent.appendChild(settingsDiv);
-
-        const btn = document.createElement('button');
-        btn.className = 'add-btn-style';
-        btn.innerText = '+ Add New Exercise';
-        btn.onclick = () => showExerciseForm();
-        sidebarContent.appendChild(btn);
-
-        ROUTINE.forEach((ex, idx) => {
-            const div = document.createElement('div');
-            div.className = 'ex-item';
-            div.style.borderLeftColor = `var(--c-${ex.color || 'green'})`;
-            div.innerHTML = `
-                <div class="ex-info">
-                    <strong>${ex.title}</strong>
-                    <div>${ex.sets} sets ${ex.time ? `• ${ex.time}s hold` : ''}</div>
-                    <div style="font-size:0.7rem">${ex.rest === false ? 'No Rest' : (ex.customRest ? `Rest: ${ex.customRest}s` : 'Rest: Global')} ${ex.prepTime ? `• Prep: ${ex.prepTime}s` : ''}</div>
-                </div>
-                <div class="ex-actions">
-                    <button title="Move Up" onclick="moveExercise(${idx}, -1)">↑</button>
-                    <button title="Move Down" onclick="moveExercise(${idx}, 1)">↓</button>
-                    <button title="Edit" onclick="showExerciseForm(${idx})">✎</button>
-                    <button title="Delete" onclick="deleteExerciseVerify(${idx})">✕</button>
-                </div>
-            `;
-            sidebarContent.appendChild(div);
-        });
-    } else {
-        const histSettings = document.createElement('details');
-        histSettings.className = 'settings-panel';
-        histSettings.innerHTML = `
-            <summary>History Settings</summary>
-            <div class="settings-content">
-                <div class="setting-row">
-                    <span>Retention (Days)</span>
-                    <select onchange="updateSetting('historyRetentionDays', this.value)">
-                        <option value="7" ${SETTINGS.historyRetentionDays === 7 ? 'selected' : ''}>7 Days</option>
-                        <option value="30" ${SETTINGS.historyRetentionDays === 30 ? 'selected' : ''}>30 Days</option>
-                        <option value="90" ${SETTINGS.historyRetentionDays === 90 ? 'selected' : ''}>90 Days</option>
-                        <option value="999" ${SETTINGS.historyRetentionDays === 999 ? 'selected' : ''}>Forever</option>
-                    </select>
-                </div>
-                <div class="setting-row">
-                    <span>Newest First</span>
-                    <label class="switch">
-                        <input type="checkbox" ${SETTINGS.historySortNewest !== false ? 'checked' : ''} onchange="updateSetting('historySortNewest', this.checked)">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-        `;
-        sidebarContent.appendChild(histSettings);
-
-        const histHeader = document.createElement('div');
-        histHeader.style.display = 'flex';
-        histHeader.style.justifyContent = 'space-between';
-        histHeader.style.marginBottom = '10px';
-        histHeader.innerHTML = `
-            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Workout Logs</span>
-            <button style="background:none; border:none; color:var(--c-blue); cursor:pointer; font-size:0.8rem;" onclick="addManualHistory()">+ Add Log</button>
-        `;
-        sidebarContent.appendChild(histHeader);
-
-        if(HISTORY.length === 0) {
-            sidebarContent.innerHTML += '<div style="color:var(--text-muted); text-align:center; padding:20px;">No workout logs found.</div>';
-        }
-        let displayHistory = [...HISTORY];
-        if (SETTINGS.historySortNewest === false) displayHistory.reverse();
-
-        displayHistory.forEach(item => {
-            const realIndex = HISTORY.indexOf(item); 
-            const div = document.createElement('details');
-            div.className = 'history-item';
-            div.innerHTML = `
-                <summary>
-                    ${item.date} 
-                    <span style="float:right; font-weight:normal; font-size:0.75rem; color:var(--text-muted)">▼ Expand</span>
-                </summary>
-                <div class="history-content">
-                    <pre>${item.summary}</pre>
-                    <div class="history-actions">
-                        <button onclick="copySpecificHistory('${escapeHtml(item.summary)}')">Copy</button>
-                        <button onclick="editHistory(${realIndex})">Edit</button>
-                        <button style="background:#dc2626" onclick="deleteHistoryVerify(${realIndex})">Delete</button>
-                    </div>
-                </div>
-            `;
-            sidebarContent.appendChild(div);
-        });
-    }
+sidebarContent.innerHTML = '';
+if (currentTab === 'exercise') {
+const settingsDiv = document.createElement('details');
+settingsDiv.className = 'settings-panel';
+settingsDiv.innerHTML = `
+<summary>Global Settings</summary>
+<div class="settings-content">
+<div class="setting-row">
+<span>Rest Between Exercises</span>
+<label class="switch">
+<input type="checkbox" ${SETTINGS.restBetweenExercises ? 'checked' : ''} onchange="updateSetting('restBetweenExercises', this.checked)">
+<span class="slider"></span>
+</label>
+</div>
+<div class="setting-row">
+<span>Universal Rest (sec)</span>
+<input type="number" value="${SETTINGS.restTime}" onchange="updateSetting('restTime', this.value)">
+</div>
+<div class="setting-row">
+<span>Transition Delay (sec)</span>
+<input type="number" value="${SETTINGS.transitionDelay}" onchange="updateSetting('transitionDelay', this.value)">
+</div>
+</div>
+`;
+sidebarContent.appendChild(settingsDiv);
+const btn = document.createElement('button');
+btn.className = 'add-btn-style';
+btn.innerText = '+ Add New Exercise';
+btn.onclick = () => showExerciseForm();
+sidebarContent.appendChild(btn);
+ROUTINE.forEach((ex, idx) => {
+const div = document.createElement('div');
+div.className = 'ex-item';
+div.style.borderLeftColor = `var(--c-${ex.color || 'green'})`;
+div.innerHTML = `
+<div class="ex-info">
+<strong>${ex.title}</strong>
+<div>${ex.sets} sets ${ex.time ? `• ${ex.time}s hold` : ''}</div>
+<div style="font-size:0.7rem">${ex.rest === false ? 'No Rest' : (ex.customRest ? `Rest: ${ex.customRest}s` : 'Rest: Global')} ${ex.prepTime ? `• Prep: ${ex.prepTime}s` : ''}</div>
+</div>
+<div class="ex-actions">
+<button title="Move Up" onclick="moveExercise(${idx}, -1)">↑</button>
+<button title="Move Down" onclick="moveExercise(${idx}, 1)">↓</button>
+<button title="Edit" onclick="showExerciseForm(${idx})">✎</button>
+<button title="Delete" onclick="deleteExerciseVerify(${idx})">✕</button>
+</div>
+`;
+sidebarContent.appendChild(div);
+});
+} else {
+const histSettings = document.createElement('details');
+histSettings.className = 'settings-panel';
+histSettings.innerHTML = `
+<summary>History Settings</summary>
+<div class="settings-content">
+<div class="setting-row">
+<span>Retention (Days)</span>
+<select onchange="updateSetting('historyRetentionDays', this.value)">
+<option value="7" ${SETTINGS.historyRetentionDays === 7 ? 'selected' : ''}>7 Days</option>
+<option value="30" ${SETTINGS.historyRetentionDays === 30 ? 'selected' : ''}>30 Days</option>
+<option value="90" ${SETTINGS.historyRetentionDays === 90 ? 'selected' : ''}>90 Days</option>
+<option value="999" ${SETTINGS.historyRetentionDays === 999 ? 'selected' : ''}>Forever</option>
+</select>
+</div>
+<div class="setting-row">
+<span>Newest First</span>
+<label class="switch">
+<input type="checkbox" ${SETTINGS.historySortNewest !== false ? 'checked' : ''} onchange="updateSetting('historySortNewest', this.checked)">
+<span class="slider"></span>
+</label>
+</div>
+</div>
+`;
+sidebarContent.appendChild(histSettings);
+const histHeader = document.createElement('div');
+histHeader.style.display = 'flex';
+histHeader.style.justifyContent = 'space-between';
+histHeader.style.marginBottom = '10px';
+histHeader.innerHTML = `
+<span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Workout Logs</span>
+<button style="background:none; border:none; color:var(--c-blue); cursor:pointer; font-size:0.8rem;" onclick="addManualHistory()">+ Add Log</button>
+`;
+sidebarContent.appendChild(histHeader);
+if(HISTORY.length === 0) {
+sidebarContent.innerHTML += '<div style="color:var(--text-muted); text-align:center; padding:20px;">No workout logs found.</div>';
 }
-
+let displayHistory = [...HISTORY];
+if (SETTINGS.historySortNewest === false) displayHistory.reverse();
+displayHistory.forEach(item => {
+const realIndex = HISTORY.indexOf(item); 
+const div = document.createElement('details');
+div.className = 'history-item';
+div.innerHTML = `
+<summary>
+${item.date} 
+<span style="float:right; font-weight:normal; font-size:0.75rem; color:var(--text-muted)">▼ Expand</span>
+</summary>
+<div class="history-content">
+<pre>${item.summary}</pre>
+<div class="history-actions">
+<button onclick="copySpecificHistory('${escapeHtml(item.summary)}')">Copy</button>
+<button onclick="editHistory(${realIndex})">Edit</button>
+<button style="background:#dc2626" onclick="deleteHistoryVerify(${realIndex})">Delete</button>
+</div>
+</div>
+`;
+sidebarContent.appendChild(div);
+});
+}
+}
 function moveExercise(idx, dir) {
-    if (idx + dir < 0 || idx + dir >= ROUTINE.length) return;
-    const temp = ROUTINE[idx];
-    ROUTINE[idx] = ROUTINE[idx + dir];
-    ROUTINE[idx + dir] = temp;
-    saveRoutine();
+if (idx + dir < 0 || idx + dir >= ROUTINE.length) return;
+const temp = ROUTINE[idx];
+ROUTINE[idx] = ROUTINE[idx + dir];
+ROUTINE[idx + dir] = temp;
+saveRoutine();
 }
-
 function showExerciseForm(index = -1) {
-    const ex = index >= 0 ? ROUTINE[index] : { title: '', sets: 3, time: '', rest: true, customRest: '', prepTime: '', color: 'green' };
-    const colors = ['green', 'blue', 'orange', 'purple', 'red', 'pink', 'yellow', 'teal', 'cyan'];
-    
-    sidebarContent.innerHTML = `
-        <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:15px; text-transform:uppercase;">${index >= 0 ? 'Edit' : 'New'} Exercise</div>
-        <div class="form-group"><label>Title</label><input type="text" id="f-title" value="${ex.title}" placeholder="e.g. Push ups"></div>
-        <div class="form-group"><label>Sets</label><input type="number" id="f-sets" value="${ex.sets}"></div>
-        <div class="form-group"><label>Prep Time (s, before start)</label><input type="number" id="f-prep" value="${ex.prepTime || ''}"></div>
-        <div class="form-group"><label>Hold Time (s, optional)</label><input type="number" id="f-time" value="${ex.time || ''}" placeholder="Leave blank for manual"></div>
-        <div class="form-group"><label>Custom Rest (s, optional)</label><input type="number" id="f-crest" value="${ex.customRest || ''}" placeholder="Leave blank for global"></div>
-        <div class="form-group">
-            <label>Color Tag</label>
-            <select id="f-color">
-                ${colors.map(c => `<option value="${c}" ${ex.color === c ? 'selected' : ''}>${c.charAt(0).toUpperCase() + c.slice(1)}</option>`).join('')}
-            </select>
-        </div>
-        <div class="form-group"><label><input type="checkbox" id="f-rest" ${ex.rest !== false ? 'checked' : ''}> Enable rest between sets</label></div>
-        <button class="action-btn" style="width:100%" onclick="saveExerciseForm(${index})">Save Exercise</button>
-        <button class="action-btn" style="width:100%; background:#444" onclick="renderSidebar()">Cancel</button>
-    `;
+const ex = index >= 0 ? ROUTINE[index] : { title: '', sets: 3, time: '', rest: true, customRest: '', prepTime: '', color: 'green' };
+const colors = ['green', 'blue', 'orange', 'purple', 'red', 'pink', 'yellow', 'teal', 'cyan'];
+sidebarContent.innerHTML = `
+<div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:15px; text-transform:uppercase;">${index >= 0 ? 'Edit' : 'New'} Exercise</div>
+<div class="form-group"><label>Title</label><input type="text" id="f-title" value="${ex.title}" placeholder="e.g. Push ups"></div>
+<div class="form-group"><label>Sets</label><input type="number" id="f-sets" value="${ex.sets}"></div>
+<div class="form-group"><label>Prep Time (s, before start)</label><input type="number" id="f-prep" value="${ex.prepTime || ''}"></div>
+<div class="form-group"><label>Hold Time (s, optional)</label><input type="number" id="f-time" value="${ex.time || ''}" placeholder="Leave blank for manual"></div>
+<div class="form-group"><label>Custom Rest (s, optional)</label><input type="number" id="f-crest" value="${ex.customRest || ''}" placeholder="Leave blank for global"></div>
+<div class="form-group">
+<label>Color Tag</label>
+<select id="f-color">
+${colors.map(c => `<option value="${c}" ${ex.color === c ? 'selected' : ''}>${c.charAt(0).toUpperCase() + c.slice(1)}</option>`).join('')}
+</select>
+</div>
+<div class="form-group"><label><input type="checkbox" id="f-rest" ${ex.rest !== false ? 'checked' : ''}> Enable rest between sets</label></div>
+<button class="action-btn" style="width:100%" onclick="saveExerciseForm(${index})">Save Exercise</button>
+<button class="action-btn" style="width:100%; background:#444" onclick="renderSidebar()">Cancel</button>
+`;
 }
-
 function saveExerciseForm(index) {
-    const newEx = {
-        title: document.getElementById('f-title').value || 'Untitled',
-        sets: parseInt(document.getElementById('f-sets').value) || 1,
-        time: parseInt(document.getElementById('f-time').value) || null,
-        prepTime: parseInt(document.getElementById('f-prep').value) || null,
-        customRest: parseInt(document.getElementById('f-crest').value) || null,
-        color: document.getElementById('f-color').value || 'green',
-        rest: document.getElementById('f-rest').checked
-    };
-    if (index >= 0) ROUTINE[index] = newEx;
-    else ROUTINE.push(newEx);
-    saveRoutine();
+const newEx = {
+title: document.getElementById('f-title').value || 'Untitled',
+sets: parseInt(document.getElementById('f-sets').value) || 1,
+time: parseInt(document.getElementById('f-time').value) || null,
+prepTime: parseInt(document.getElementById('f-prep').value) || null,
+customRest: parseInt(document.getElementById('f-crest').value) || null,
+color: document.getElementById('f-color').value || 'green',
+rest: document.getElementById('f-rest').checked
+};
+if (index >= 0) ROUTINE[index] = newEx;
+else ROUTINE.push(newEx);
+saveRoutine();
 }
-
 function deleteExerciseVerify(index) {
-    showModal("Delete Exercise", `Remove <strong>${ROUTINE[index].title}</strong> from routine?`, () => {
-        ROUTINE.splice(index, 1);
-        saveRoutine();
-    }, "Delete", true);
+showModal("Delete Exercise", `Remove <strong>${ROUTINE[index].title}</strong> from routine?`, () => {
+ROUTINE.splice(index, 1);
+saveRoutine();
+}, "Delete", true);
 }
-
 // History Modals
 function addManualHistory() {
-    showModal("Add Log", `
-        <div class="form-group"><label>Date / Title</label><input type="text" id="h-title" value="${new Date().toLocaleDateString()}"></div>
-        <div class="form-group"><label>Summary</label><textarea id="h-sum"></textarea></div>
-    `, () => {
-        const d = document.getElementById('h-title').value;
-        const s = document.getElementById('h-sum').value;
-        if(d && s) {
-            HISTORY.unshift({ id: Date.now().toString(), timestamp: Date.now(), date: d, summary: s });
-            saveHistoryData(); renderSidebar();
-        }
-    }, "Save");
+showModal("Add Log", `
+<div class="form-group"><label>Date / Title</label><input type="text" id="h-title" value="${new Date().toLocaleDateString()}"></div>
+<div class="form-group"><label>Summary</label><textarea id="h-sum"></textarea></div>
+`, () => {
+const d = document.getElementById('h-title').value;
+const s = document.getElementById('h-sum').value;
+if(d && s) {
+HISTORY.unshift({ id: Date.now().toString(), timestamp: Date.now(), date: d, summary: s });
+saveHistoryData(); renderSidebar();
+}
+}, "Save");
 }
 function editHistory(idx) {
-    const item = HISTORY[idx];
-    showModal("Edit Log", `
-        <div class="form-group"><label>Date / Title</label><input type="text" id="h-title" value="${item.date}"></div>
-        <div class="form-group"><label>Summary</label><textarea id="h-sum">${item.summary}</textarea></div>
-    `, () => {
-        HISTORY[idx].date = document.getElementById('h-title').value;
-        HISTORY[idx].summary = document.getElementById('h-sum').value;
-        saveHistoryData(); renderSidebar();
-    }, "Update");
+const item = HISTORY[idx];
+showModal("Edit Log", `
+<div class="form-group"><label>Date / Title</label><input type="text" id="h-title" value="${item.date}"></div>
+<div class="form-group"><label>Summary</label><textarea id="h-sum">${item.summary}</textarea></div>
+`, () => {
+HISTORY[idx].date = document.getElementById('h-title').value;
+HISTORY[idx].summary = document.getElementById('h-sum').value;
+saveHistoryData(); renderSidebar();
+}, "Update");
 }
 function deleteHistoryVerify(idx) {
-    showModal("Delete Log", "Are you sure? This cannot be undone.", () => {
-        HISTORY.splice(idx, 1); saveHistoryData(); renderSidebar();
-    }, "Delete", true);
+showModal("Delete Log", "Are you sure? This cannot be undone.", () => {
+HISTORY.splice(idx, 1); saveHistoryData(); renderSidebar();
+}, "Delete", true);
 }
 function copySpecificHistory(text) {
-    const temp = document.createElement('textarea');
-    temp.value = text.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#039;/g, "'");
-    document.body.appendChild(temp); temp.select(); document.execCommand('copy'); document.body.removeChild(temp);
-    showModal("Copied", "Log copied to clipboard!", null, "OK", false, false);
+const temp = document.createElement('textarea');
+temp.value = text.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#039;/g, "'");
+document.body.appendChild(temp); temp.select(); document.execCommand('copy'); document.body.removeChild(temp);
+showModal("Copied", "Log copied to clipboard!", null, "OK", false, false);
 }
 function escapeHtml(t) {
-    return t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+return t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
-
 // ==========================================
 // WORKOUT ENGINE
 // ==========================================
 function buildSequence() {
-    let seq = [];
-    for (let i = 0; i < ROUTINE.length; i++) {
-        let ex = ROUTINE[i];
-        let exRestEnabled = ex.hasOwnProperty('rest') ? ex.rest : true;
-        let exRestDuration = ex.customRest || SETTINGS.restTime;
-        let color = ex.color || 'green';
-
-        for (let s = 1; s <= ex.sets; s++) {
-            // Add Prep Time Step if exists
-            if (ex.prepTime && ex.prepTime > 0) {
-                seq.push({
-                    type: 'PREP', title: 'PREPARE', targetTime: ex.prepTime,
-                    nextInfo: `${ex.title} (Set ${s})`, color: 'yellow'
-                });
-            }
-
-            seq.push({
-                type: 'EXERCISE', title: ex.title, set: s, totalSets: ex.sets,
-                targetTime: ex.time || null, color: color
-            });
-
-            let isLastSet = (s === ex.sets);
-            let isLastExercise = (i === ROUTINE.length - 1);
-
-            if (!isLastSet && exRestEnabled) {
-                seq.push({
-                    type: 'REST', title: 'REST', targetTime: exRestDuration,
-                    nextInfo: `${ex.title} (Set ${s + 1})`, color: 'orange'
-                });
-            } else if (isLastSet && !isLastExercise && SETTINGS.restBetweenExercises) {
-                seq.push({
-                    type: 'REST', title: 'REST', targetTime: SETTINGS.restTime,
-                    nextInfo: `${ROUTINE[i+1].title}`, color: 'orange'
-                });
-            }
-        }
-    }
-    return seq;
+let seq = [];
+for (let i = 0; i < ROUTINE.length; i++) {
+let ex = ROUTINE[i];
+let exRestEnabled = ex.hasOwnProperty('rest') ? ex.rest : true;
+let exRestDuration = ex.customRest || SETTINGS.restTime;
+let color = ex.color || 'green';
+for (let s = 1; s <= ex.sets; s++) {
+// Add Prep Time Step if exists
+if (ex.prepTime && ex.prepTime > 0) {
+seq.push({
+type: 'PREP', title: 'PREPARE', targetTime: ex.prepTime,
+nextInfo: `${ex.title} (Set ${s})`, color: 'yellow', autoAdvanced: false
+});
 }
-
+seq.push({
+type: 'EXERCISE', title: ex.title, set: s, totalSets: ex.sets,
+targetTime: ex.time || null, color: color
+});
+let isLastSet = (s === ex.sets);
+let isLastExercise = (i === ROUTINE.length - 1);
+if (!isLastSet && exRestEnabled) {
+seq.push({
+type: 'REST', title: 'REST', targetTime: exRestDuration,
+nextInfo: `${ex.title} (Set ${s + 1})`, color: 'orange'
+});
+} else if (isLastSet && !isLastExercise && SETTINGS.restBetweenExercises) {
+seq.push({
+type: 'REST', title: 'REST', targetTime: SETTINGS.restTime,
+nextInfo: `${ROUTINE[i+1].title}`, color: 'orange'
+});
+}
+}
+}
+return seq;
+}
 function formatTime(seconds, forcePositiveSign = false) {
-    let isNegative = seconds < 0;
-    seconds = Math.abs(seconds);
-    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
-    const s = Math.floor(seconds % 60).toString().padStart(2, '0');
-    return `${isNegative ? '-' : (forcePositiveSign ? '+' : '')}${m}:${s}`;
+let isNegative = seconds < 0;
+seconds = Math.abs(seconds);
+const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+const s = Math.floor(seconds % 60).toString().padStart(2, '0');
+return `${isNegative ? '-' : (forcePositiveSign ? '+' : '')}${m}:${s}`;
 }
-
 function initAudio() {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
+if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+if (audioCtx.state === 'suspended') audioCtx.resume();
 }
-
 function playShortBeep() {
-    if(!audioCtx) return;
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = 'sine';
-    osc.frequency.value = 432; 
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.start();
-    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-    osc.stop(audioCtx.currentTime + 0.1);
+if(!audioCtx) return;
+const osc = audioCtx.createOscillator();
+const gain = audioCtx.createGain();
+osc.type = 'sine';
+osc.frequency.value = 432; 
+osc.connect(gain);
+gain.connect(audioCtx.destination);
+osc.start();
+gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+osc.stop(audioCtx.currentTime + 0.1);
 }
-
+function playLongBeep() {
+if(!audioCtx) return;
+const osc = audioCtx.createOscillator();
+const gain = audioCtx.createGain();
+osc.type = 'sine';
+osc.frequency.value = 432; 
+osc.connect(gain);
+gain.connect(audioCtx.destination);
+osc.start();
+gain.gain.setValueAtTime(0.8, audioCtx.currentTime);
+gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+osc.stop(audioCtx.currentTime + 0.6);
+}
 function startBeeping() {
-    if (isBeeping) return;
-    isBeeping = true;
-    beepInterval = setInterval(() => {
-        if(!audioCtx) return;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.value = 432; // Changed to 432 Hz
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        gain.gain.setValueAtTime(0.6, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
-        osc.stop(audioCtx.currentTime + 0.3);
-    }, 1000);
+if (isBeeping) return;
+isBeeping = true;
+beepInterval = setInterval(() => {
+if(!audioCtx) return;
+const osc = audioCtx.createOscillator();
+const gain = audioCtx.createGain();
+osc.type = 'sine';
+osc.frequency.value = 432; // 432 Hz
+osc.connect(gain);
+gain.connect(audioCtx.destination);
+osc.start();
+gain.gain.setValueAtTime(0.6, audioCtx.currentTime);
+gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+osc.stop(audioCtx.currentTime + 0.3);
+}, 1000);
+}
+function stopBeeping() {
+if (beepInterval) clearInterval(beepInterval);
+beepInterval = null;
+isBeeping = false;
 }
 
-function stopBeeping() {
-    if (beepInterval) clearInterval(beepInterval);
-    beepInterval = null;
-    isBeeping = false;
+// Controller Actions
+function togglePause() {
+if (currentIndex === -1 || isFinished) return;
+isPaused = !isPaused;
+const btn = document.getElementById('btn-pause');
+if (isPaused) {
+pauseTimestamp = Date.now();
+btn.innerText = '▶';
+btn.classList.add('paused');
+stopBeeping(); 
+} else {
+const pauseDuration = Date.now() - pauseTimestamp;
+totalStartTime += pauseDuration;
+stepStartTime += pauseDuration;
+btn.innerText = '⏸';
+btn.classList.remove('paused');
+}
+}
+function skipStep() {
+if (currentIndex === -1 || isFinished) return;
+if (isPaused) togglePause(); // unpause before skipping
+advanceStep(true);
 }
 
 async function requestWakeLock() {
-    try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } 
-    catch (err) { console.log('Wake Lock error:', err); }
+try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } 
+catch (err) { console.log('Wake Lock error:', err); }
 }
 
 function updateDisplay() {
-    if (totalStartTime) {
-        elTotalTime.innerText = formatTime((Date.now() - totalStartTime) / 1000);
-    }
-    if (currentIndex >= 0 && currentIndex < sequence.length) {
-        const step = sequence[currentIndex];
-        const stepElapsed = (Date.now() - stepStartTime) / 1000;
-        
-        if (step.targetTime) {
-            let remaining = step.targetTime - stepElapsed;
-            if (remaining <= 0) {
-                elTime.innerText = "00:00";
-                startBeeping();
-            } else {
-                elTime.innerText = formatTime(-remaining);
-                // Pre-beep logic (3, 2, 1 seconds)
-                let secRemaining = Math.ceil(remaining);
-                if (secRemaining <= 3 && secRemaining > 0 && lastPreBeep !== secRemaining) {
-                    playShortBeep();
-                    lastPreBeep = secRemaining;
-                }
-            }
-        } else {
-            elTime.innerText = formatTime(stepElapsed, true);
-        }
-    }
+if (isPaused) return; // Freeze UI
+
+if (totalStartTime) {
+elTotalTime.innerText = formatTime((Date.now() - totalStartTime) / 1000);
+}
+if (currentIndex >= 0 && currentIndex < sequence.length) {
+const step = sequence[currentIndex];
+const stepElapsed = (Date.now() - stepStartTime) / 1000;
+if (step.targetTime) {
+let remaining = step.targetTime - stepElapsed;
+if (remaining <= 0) {
+elTime.innerText = "00:00";
+// Auto-advance logic for PREP
+if (step.type === 'PREP') {
+if (!step.autoAdvanced) {
+step.autoAdvanced = true;
+playLongBeep();
+advanceStep(false);
+}
+} else {
+startBeeping();
+}
+} else {
+elTime.innerText = formatTime(-remaining);
+// Pre-beep logic (3, 2, 1 seconds)
+let secRemaining = Math.ceil(remaining);
+if (secRemaining <= 3 && secRemaining > 0 && lastPreBeep !== secRemaining) {
+playShortBeep();
+lastPreBeep = secRemaining;
+}
+}
+} else {
+elTime.innerText = formatTime(stepElapsed, true);
+}
+}
 }
 
 function updateNextPreview() {
-    if (currentIndex + 1 < sequence.length) {
-        let n1 = sequence[currentIndex + 1];
-        let n1Text = "";
-        
-        if (n1.type === 'REST') n1Text = `Rest (${formatTime(n1.targetTime)})`;
-        else if (n1.type === 'PREP') n1Text = `Prep for ${n1.title}`;
-        else n1Text = `Set ${n1.set}/${n1.totalSets}`;
+if (currentIndex + 1 < sequence.length) {
+let n1 = sequence[currentIndex + 1];
+let n1Text = "";
 
-        elNextImmediate.innerText = "Next: " + n1Text;
+if (n1.type === 'REST') n1Text = `REST (${formatTime(n1.targetTime)}) before ${n1.nextInfo}`;
+else if (n1.type === 'PREP') n1Text = `PREP (${n1.targetTime}s) for ${n1.title}`;
+else n1Text = `Set ${n1.set}/${n1.totalSets} of ${n1.title}`;
 
-        // Look ahead for the next distinct exercise title
-        let upcomingEx = null;
-        let currentTitle = sequence[currentIndex] ? sequence[currentIndex].title : '';
-        for (let i = currentIndex + 1; i < sequence.length; i++) {
-            if (sequence[i].type === 'EXERCISE' && sequence[i].title !== currentTitle) {
-                upcomingEx = sequence[i].title;
-                break;
-            }
-        }
+elNextImmediate.innerText = "Next: " + n1Text;
 
-        if (upcomingEx) elNextUpcoming.innerText = "Then: " + upcomingEx;
-        else elNextUpcoming.innerText = "Then: Session Complete";
-        
-    } else {
-        elNextImmediate.innerText = "Final Step";
-        elNextUpcoming.innerText = "";
-    }
+// Look ahead for the next distinct exercise title
+let upcomingEx = null;
+let currentTitle = sequence[currentIndex] ? sequence[currentIndex].title : (sequence.length > 0 ? sequence[0].title : '');
+for (let i = currentIndex + 1; i < sequence.length; i++) {
+if (sequence[i].type === 'EXERCISE' && sequence[i].title !== currentTitle) {
+upcomingEx = sequence[i].title;
+break;
+}
 }
 
-function advanceStep() {
-    if (isFinished) return; 
-    initAudio();
-    stopBeeping();
-    lastPreBeep = 0; // Reset pre-beep tracker
-    
-    if (currentIndex === -1) {
-        totalStartTime = Date.now();
-        requestWakeLock();
-        mainInterval = setInterval(updateDisplay, 100);
-    } else if (currentIndex < sequence.length) {
-        const step = sequence[currentIndex];
-        if (step) {
-            let elapsed = (Date.now() - stepStartTime) / 1000;
-            if (step.type === 'EXERCISE' && !step.targetTime) {
-                elapsed = Math.max(0, elapsed - SETTINGS.transitionDelay);
-            }
-            records.push({ type: step.type, title: step.title, set: step.set, duration: elapsed });
-        }
-    }
-    
-    currentIndex++;
-    if (currentIndex >= sequence.length) {
-        finishWorkout();
-        return;
-    }
-    
-    const step = sequence[currentIndex];
-    stepStartTime = Date.now();
-    
-    // Clear old color classes, add new one
-    elBtn.className = `circle-btn color-${step.color || 'blue'}`;
-    
-    if (step.type === 'EXERCISE') {
-        elTitle.innerText = step.title;
-        elSubtitle.innerText = `Set ${step.set} of ${step.totalSets}`;
-    } else if (step.type === 'PREP') {
-        elTitle.innerText = step.title;
-        elSubtitle.innerText = `Up next: ${step.nextInfo}`;
-    } else {
-        elTitle.innerText = step.title;
-        elSubtitle.innerText = `Up next: ${step.nextInfo}`;
-    }
-    
-    elTime.innerText = step.targetTime ? formatTime(-step.targetTime) : "+00:00";
-    updateNextPreview();
+if (upcomingEx) elNextUpcoming.innerText = "Then: " + upcomingEx;
+else elNextUpcoming.innerText = "Then: Session Complete";
+
+} else {
+elNextImmediate.innerText = "Final Step";
+elNextUpcoming.innerText = "";
+}
 }
 
-function finishWorkout() {
-    isFinished = true;
-    if (mainInterval) clearInterval(mainInterval);
-    elBtn.className = 'circle-btn color-purple';
-    elTitle.innerText = "COMPLETE";
-    elSubtitle.innerText = "Session finished!";
-    elTime.innerText = "";
-    elNextImmediate.innerText = "Creating report...";
-    elNextUpcoming.innerText = "";
-    setTimeout(generateSummaryText, 1000);
+function advanceStep(isSkip = false) {
+if (isFinished) return; 
+initAudio();
+stopBeeping();
+lastPreBeep = 0; // Reset pre-beep tracker
+
+if (currentIndex === -1) {
+totalStartTime = Date.now();
+requestWakeLock();
+mainInterval = setInterval(updateDisplay, 100);
+} else if (currentIndex < sequence.length) {
+const step = sequence[currentIndex];
+if (step && !isSkip) { // Only log if not skipped
+let elapsed = (Date.now() - stepStartTime) / 1000;
+if (step.type === 'EXERCISE' && !step.targetTime) {
+elapsed = Math.max(0, elapsed - SETTINGS.transitionDelay);
+}
+records.push({ type: step.type, title: step.title, set: step.set, duration: elapsed });
+}
+}
+
+currentIndex++;
+if (currentIndex >= sequence.length) {
+finishWorkout(false);
+return;
+}
+
+const step = sequence[currentIndex];
+stepStartTime = Date.now();
+
+// Clear old color classes, add new one
+elBtn.className = `circle-btn color-${step.color || 'blue'}`;
+
+if (step.type === 'EXERCISE') {
+elTitle.innerText = step.title;
+elSubtitle.innerText = `Set ${step.set} of ${step.totalSets}`;
+} else if (step.type === 'PREP') {
+elTitle.innerText = step.title;
+elSubtitle.innerText = `Up next: ${step.nextInfo}`;
+} else {
+elTitle.innerText = step.title;
+elSubtitle.innerText = `Up next: ${step.nextInfo}`;
+}
+
+elTime.innerText = step.targetTime ? formatTime(-step.targetTime) : "+00:00";
+updateNextPreview();
+}
+
+function finishWorkout(fromEndButton = false) {
+if (isFinished) return;
+isFinished = true;
+
+// If ended manually, record the partial time for the current step
+if (currentIndex >= 0 && currentIndex < sequence.length && fromEndButton) {
+const step = sequence[currentIndex];
+let elapsed = (Date.now() - stepStartTime) / 1000;
+if (step.type === 'EXERCISE' && !step.targetTime) {
+elapsed = Math.max(0, elapsed - SETTINGS.transitionDelay);
+}
+records.push({ type: step.type, title: step.title, set: step.set, duration: elapsed });
+}
+
+if (mainInterval) clearInterval(mainInterval);
+elBtn.className = 'circle-btn color-purple';
+elTitle.innerText = "COMPLETE";
+elSubtitle.innerText = "Session finished!";
+elTime.innerText = "";
+elNextImmediate.innerText = "Creating report...";
+elNextUpcoming.innerText = "";
+setTimeout(generateSummaryText, 1000);
 }
 
 function generateSummaryText() {
-    uiWorkout.style.display = 'none';
-    uiSummary.style.display = 'flex';
-    const now = new Date();
-    const dateStr = now.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
-    const startStr = new Date(totalStartTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    const endStr = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    const totalDur = formatTime((now - totalStartTime) / 1000);
-    
-    let txt = `Workout Log: ${dateStr}\nTimeline: ${startStr} - ${endStr}\nTotal Duration: ${totalDur}\n\n`;
-    
-    records.forEach(r => {
-        if (r.type === 'REST' || r.type === 'PREP') {
-            txt += `[${r.title}] ${formatTime(r.duration)}\n`;
-        } else {
-            txt += `${r.title} (Set ${r.set}): ${formatTime(r.duration)}\n`;
-        }
-    });
-    
-    txt += `\n*Manual sets include a -${SETTINGS.transitionDelay}s delay correction.*`;
-    document.getElementById('summary-text').value = txt;
-    
-    HISTORY.unshift({
-        id: Date.now().toString(),
-        timestamp: Date.now(),
-        date: dateStr + ' ' + startStr,
-        summary: txt
-    });
-    saveHistoryData();
+uiWorkout.style.display = 'none';
+uiSummary.style.display = 'flex';
+const now = new Date();
+const dateStr = now.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+const startStr = new Date(totalStartTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+const endStr = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+const totalDur = formatTime((now - totalStartTime) / 1000);
+
+let txt = `Workout Log: ${dateStr}\nTimeline: ${startStr} - ${endStr}\nTotal Duration: ${totalDur}\n\n`;
+
+records.forEach(r => {
+if (r.type === 'REST' || r.type === 'PREP') {
+txt += `[${r.title}] ${formatTime(r.duration)}\n`;
+} else {
+txt += `${r.title} (Set ${r.set}): ${formatTime(r.duration)}\n`;
+}
+});
+
+txt += `\n*Manual sets include a -${SETTINGS.transitionDelay}s delay correction.*`;
+document.getElementById('summary-text').value = txt;
+
+HISTORY.unshift({
+id: Date.now().toString(),
+timestamp: Date.now(),
+date: dateStr + ' ' + startStr,
+summary: txt
+});
+saveHistoryData();
 }
 
 function copySummaryText() {
-    const txt = document.getElementById('summary-text');
-    txt.select();
-    txt.setSelectionRange(0, 99999);
-    document.execCommand('copy');
-    showModal("Copied", "Log copied to clipboard!", null, "OK", false, false);
+const txt = document.getElementById('summary-text');
+txt.select();
+txt.setSelectionRange(0, 99999);
+document.execCommand('copy');
+showModal("Copied", "Log copied to clipboard!", null, "OK", false, false);
 }
 
 window.onload = () => {
-    cleanHistory(); 
-    sequence = buildSequence();
-    updateNextPreview();
-    elBtn.addEventListener('click', advanceStep);
-    renderSidebar();
+cleanHistory(); 
+sequence = buildSequence();
+updateNextPreview();
+// Bind advanceStep explicitly returning false for isSkip parameter
+elBtn.addEventListener('click', () => advanceStep(false));
+renderSidebar();
 };
 </script>
 </body>
